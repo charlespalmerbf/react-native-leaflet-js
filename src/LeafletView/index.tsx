@@ -34,6 +34,8 @@ const DEFAULT_MAP_LAYERS = [
 ];
 
 const DEFAULT_ZOOM = 15;
+const DEFAULT_MAX_ZOOM = 16;
+const DEFAULT_MIN_ZOOM = 10;
 
 export type LeafletViewProps = {
   renderLoading?: () => React.ReactElement;
@@ -47,6 +49,8 @@ export type LeafletViewProps = {
   mapCenterPosition?: LatLng;
   ownPositionMarker?: OwnPositionMarker;
   zoom?: number;
+  maxZoom?: number;
+  minZoom?: number;
   doDebug?: boolean;
   androidHardwareAccelerationDisabled?: boolean;
 };
@@ -63,6 +67,8 @@ const LeafletView: React.FC<LeafletViewProps> = ({
   mapCenterPosition,
   ownPositionMarker,
   zoom,
+  maxZoom,
+  minZoom,
   doDebug,
   androidHardwareAccelerationDisabled,
 }) => {
@@ -111,6 +117,8 @@ const LeafletView: React.FC<LeafletViewProps> = ({
       };
     }
     startupMessage.zoom = zoom;
+    startupMessage.maxZoom = maxZoom;
+    startupMessage.minZoom = minZoom;
 
     sendMessage(startupMessage);
     setInitialized(true);
@@ -124,6 +132,8 @@ const LeafletView: React.FC<LeafletViewProps> = ({
     ownPositionMarker,
     sendMessage,
     zoom,
+    maxZoom,
+    minZoom
   ]);
 
   const handleMessage = useCallback(
@@ -227,6 +237,8 @@ LeafletView.defaultProps = {
   renderLoading: () => <LoadingIndicator />,
   mapLayers: DEFAULT_MAP_LAYERS,
   zoom: DEFAULT_ZOOM,
+  maxZoom: DEFAULT_MAX_ZOOM,
+  minZoom: DEFAULT_MIN_ZOOM,
   doDebug: __DEV__,
 };
 
