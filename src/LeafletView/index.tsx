@@ -208,7 +208,7 @@ const LeafletView: React.FC<LeafletViewProps> = ({
     if (!initialized) {
       return;
     }
-    sendMessage({ zoom });
+    sendMessage({ zoom, maxZoom, minZoom });
   }, [initialized, zoom, sendMessage]);
 
   return (

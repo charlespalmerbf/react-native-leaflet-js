@@ -23164,6 +23164,7 @@
                     (n.handleMessage = function (e) {
                       n.addDebugMessage(e.data);
                       try {
+                        console.log(e.data);
                         e.data.mapCenterPosition &&
                           n.state.mapRef.leafletElement.flyTo([
                             e.data.mapCenterPosition.lat,
