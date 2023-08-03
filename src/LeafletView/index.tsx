@@ -11,7 +11,7 @@ import {
   OWN_POSTION_MARKER_ID,
 } from './types';
 import { LatLng } from 'react-leaflet';
-import { NativeSyntheticEvent, Platform, StyleSheet } from 'react-native';
+import { NativeSyntheticEvent, StyleSheet, Platform } from 'react-native';
 import {
   WebViewError,
   WebViewMessageEvent,
@@ -49,6 +49,8 @@ export type LeafletViewProps = {
   mapCenterPosition?: LatLng;
   ownPositionMarker?: OwnPositionMarker;
   zoom?: number;
+  filePath?: string;
+  fileAccessPath?: string;
   maxZoom?: number;
   minZoom?: number;
   doDebug?: boolean;
@@ -67,6 +69,8 @@ const LeafletView: React.FC<LeafletViewProps> = ({
   mapCenterPosition,
   ownPositionMarker,
   zoom,
+  filePath,
+  fileAccessPath,
   maxZoom,
   minZoom,
   doDebug,
@@ -224,11 +228,12 @@ const LeafletView: React.FC<LeafletViewProps> = ({
       onError={onError}
       originWhitelist={['*']}
       renderLoading={renderLoading}
-      source={LEAFLET_HTML_SOURCE}
+      source={filePath ? { uri: filePath } : LEAFLET_HTML_SOURCE}
       allowFileAccess={true}
       allowUniversalAccessFromFileURLs={true}
       allowFileAccessFromFileURLs={true}
       androidHardwareAccelerationDisabled={androidHardwareAccelerationDisabled}
+      allowingReadAccessToURL={fileAccessPath}
     />
   );
 };
