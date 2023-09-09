@@ -11,7 +11,7 @@ import {
   OWN_POSTION_MARKER_ID,
 } from './types';
 import { LatLng } from 'react-leaflet';
-import { NativeSyntheticEvent, Platform, StyleSheet } from 'react-native';
+import { NativeSyntheticEvent, StyleSheet, Platform } from 'react-native';
 import {
   WebViewError,
   WebViewMessageEvent,
@@ -34,6 +34,8 @@ const DEFAULT_MAP_LAYERS = [
 ];
 
 const DEFAULT_ZOOM = 15;
+const DEFAULT_MAX_ZOOM = 16;
+const DEFAULT_MIN_ZOOM = 10;
 
 export type LeafletViewProps = {
   renderLoading?: () => React.ReactElement;
@@ -47,6 +49,10 @@ export type LeafletViewProps = {
   mapCenterPosition?: LatLng;
   ownPositionMarker?: OwnPositionMarker;
   zoom?: number;
+  filePath?: string;
+  fileAccessPath?: string;
+  maxZoom?: number;
+  minZoom?: number;
   doDebug?: boolean;
   androidHardwareAccelerationDisabled?: boolean;
 };
@@ -63,6 +69,10 @@ const LeafletView: React.FC<LeafletViewProps> = ({
   mapCenterPosition,
   ownPositionMarker,
   zoom,
+  filePath,
+  fileAccessPath,
+  maxZoom,
+  minZoom,
   doDebug,
   androidHardwareAccelerationDisabled,
 }) => {
@@ -111,6 +121,8 @@ const LeafletView: React.FC<LeafletViewProps> = ({
       };
     }
     startupMessage.zoom = zoom;
+    startupMessage.maxZoom = maxZoom;
+    startupMessage.minZoom = minZoom;
 
     sendMessage(startupMessage);
     setInitialized(true);
@@ -124,6 +136,8 @@ const LeafletView: React.FC<LeafletViewProps> = ({
     ownPositionMarker,
     sendMessage,
     zoom,
+    maxZoom,
+    minZoom
   ]);
 
   const handleMessage = useCallback(
@@ -198,7 +212,7 @@ const LeafletView: React.FC<LeafletViewProps> = ({
     if (!initialized) {
       return;
     }
-    sendMessage({ zoom });
+    sendMessage({ zoom, maxZoom, minZoom });
   }, [initialized, zoom, sendMessage]);
 
   return (
@@ -214,11 +228,12 @@ const LeafletView: React.FC<LeafletViewProps> = ({
       onError={onError}
       originWhitelist={['*']}
       renderLoading={renderLoading}
-      source={LEAFLET_HTML_SOURCE}
+      source={filePath ? { uri: filePath } : LEAFLET_HTML_SOURCE}
       allowFileAccess={true}
       allowUniversalAccessFromFileURLs={true}
       allowFileAccessFromFileURLs={true}
       androidHardwareAccelerationDisabled={androidHardwareAccelerationDisabled}
+      allowingReadAccessToURL={fileAccessPath}
     />
   );
 };
@@ -227,6 +242,8 @@ LeafletView.defaultProps = {
   renderLoading: () => <LoadingIndicator />,
   mapLayers: DEFAULT_MAP_LAYERS,
   zoom: DEFAULT_ZOOM,
+  maxZoom: DEFAULT_MAX_ZOOM,
+  minZoom: DEFAULT_MIN_ZOOM,
   doDebug: __DEV__,
 };
 

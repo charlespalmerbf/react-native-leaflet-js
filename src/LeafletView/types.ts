@@ -120,6 +120,8 @@ export interface MapMessage {
   mapCenterPosition?: LatLng;
   ownPositionMarker?: OwnPositionMarker;
   zoom?: number;
+  maxZoom?: number;
+  minZoom?: number;
   id?: string;
 }
 
@@ -129,6 +131,8 @@ export interface WebviewLeafletMessagePayload {
   mapMarkerID?: string;
   touchLatLng?: LatLng;
   zoom?: number;
+  maxZoom?: number;
+  minZoom?: number;
 }
 
 export interface WebviewLeafletMessage {
